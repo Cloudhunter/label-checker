@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { BskyAgent } from '@atproto/api';
-import { AtUri } from '@atproto/api';
+import { BskyAgent, ComAtprotoLabelDefs } from '@atproto/api';
+import { AtUri, AppBskyFeedDefs } from '@atproto/api';
+import { XRPCInvalidResponseError } from '@atproto/xrpc';
 import labelsMap from './labelDescriptions.json';
 import { env } from 'process';
 
@@ -9,10 +10,10 @@ const agent = new BskyAgent({ service: env.BSKY_SERVICE as string });
 const _ = await agent.login({
   identifier: env.BSKY_IDENTIFIER as string,
   password: env.BSKY_PASSWORD as string,
-});
+}); // eslint-disable-line @typescript-eslint/no-unused-vars
 // for some reason it doesn't work unless I assign the return to a value...
 
-const postRegex: RegExp = /^.*[b|p]sky.app\/profile\/(.*?)\/post\/(.*?)$/;
+const postRegex = /^.*[b|p]sky.app\/profile\/(.*?)\/post\/(.*?)$/;
 
 const unknownLabel = {
   id: 'unknown',
@@ -44,13 +45,13 @@ export default async function handler(
     }
   } else if (postRegex.test(checkee)) {
     const match = checkee.match(postRegex);
-    var handle = match?.[1];
+    let handle = match?.[1];
     const rkey = match?.[2];
     if (!match?.[1].startsWith('did:plc')) {
       try {
         const handleResp = await agent.resolveHandle({ handle: handle });
         handle = handleResp.data.did;
-      } catch (e) {
+      } catch {
         res.status(404);
         res.json({
           labelList: [],
@@ -73,23 +74,17 @@ async function checkHandle(handle: string, res: NextApiResponse) {
     });
 
     res.json({
-      labelList: decorateLabels(response.data.labels as string[]),
+      labelList: decorateLabels(
+        response.data.labels as ComAtprotoLabelDefs.Label[]
+      ),
       error: '',
     });
-  } catch (error: any) {
-    if ('status' in error) {
+  } catch (error) {
+    if (error instanceof XRPCInvalidResponseError) {
       res.status(error.status);
-    }
-    if ('message' in error) {
       res.json({
         labelList: [],
         error: error.message,
-      });
-    } else {
-      res.json({
-        labelList: [],
-        error: 'Error: Unknown Error',
-        errorRaw: error,
       });
     }
   }
@@ -98,32 +93,40 @@ async function checkHandle(handle: string, res: NextApiResponse) {
 async function checkPost(post: AtUri, res: NextApiResponse) {
   try {
     const resp = await agent.getPostThread({ uri: post.toString(), depth: 0 });
-    const anyPost = resp.data.thread.post as any;
-    res.json({
-      labelList: decorateLabels(anyPost.labels),
-      error: '',
-    });
-  } catch (error: any) {
-    if ('status' in error) {
-      res.status(error.status);
+    resp.data.thread.post;
+    if (AppBskyFeedDefs.isThreadViewPost(resp.data.thread)) {
+      const labels = resp.data.thread.post.labels || [];
+      res.json({
+        labelList: decorateLabels(labels),
+        error: '',
+      });
+    } else if (AppBskyFeedDefs.isBlockedPost(resp.data.thread)) {
+      res.status(400);
+      res.json({
+        labelList: [],
+        error:
+          'Error: Cannot get data as @cloudhunter.co.uk has been blocked by the user',
+      });
+    } else {
+      res.status(404);
+      res.json({
+        labelList: [],
+        error: 'Error: Post not found',
+      });
     }
-    if ('message' in error) {
+  } catch (error) {
+    if (error instanceof XRPCInvalidResponseError) {
+      res.status(error.status);
       res.json({
         labelList: [],
         error: error.message,
-      });
-    } else {
-      res.json({
-        labelList: [],
-        error: 'Error: Unknown Error',
-        errorRaw: error,
       });
     }
   }
 }
 
-function decorateLabels(labels: string[]) {
-  const labelResponse = labels?.map((retLabel: any) => {
+function decorateLabels(labels: ComAtprotoLabelDefs.Label[]) {
+  const labelResponse = labels?.map((retLabel: ComAtprotoLabelDefs.Label) => {
     const newLabel = labelsMap.find((label) => label.id === retLabel.val);
     if (newLabel) {
       return newLabel;

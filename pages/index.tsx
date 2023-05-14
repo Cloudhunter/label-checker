@@ -1,5 +1,5 @@
 import Label from '@/components/Label';
-import React, { useState } from 'react';
+import React, { ChangeEventHandler, useState } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
 
 const IndexPage = () => {
@@ -8,7 +8,7 @@ const IndexPage = () => {
   const [first, setFirst] = useState<boolean>(true);
   const [buttonState, setButtonState] = useState<boolean>(true);
 
-  const checkeeChange = (event: any) => {
+  const checkeeChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setCheckee(event.target.value);
   };
 
