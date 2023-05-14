@@ -16,22 +16,22 @@
   },
   {
     "id": "porn",
-    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled (default app behaviour). Will also be filtered as per the users \"Content Filtering\" section as per the \"Explicit Sexual Images\" setting.",
     "colour": "red"
   },
   {
     "id": "sexual",
-    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled (default app behaviour).",
     "colour": "red"
   },
   {
     "id": "nudity",
-    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled (default app behaviour). Will also be filtered as per the users \"Content Filtering\" section as per the \"Nudity\" setting.",
     "colour": "red"
   },
   {
     "id": "underwear",
-    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled (default app behaviour).",
     "colour": "red"
   },
   {
