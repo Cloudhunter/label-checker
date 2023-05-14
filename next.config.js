@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  webpack: (config) => {
+    config.experiments = { topLevelAwait: true, layers: true };
+    return config;
+  },
+  output: 'standalone',
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

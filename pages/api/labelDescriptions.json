@@ -1,0 +1,42 @@
+[
+  {
+    "id": "corpse",
+    "description": "Prevents the user from showing up in the \"What's Hot\" feed",
+    "colour": "red"
+  },
+  {
+    "id": "selfharm",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed",
+    "colour": "red"
+  },
+  {
+    "id": "!no-promote",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed",
+    "colour": "red"
+  },
+  {
+    "id": "porn",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "colour": "red"
+  },
+  {
+    "id": "sexual",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "colour": "red"
+  },
+  {
+    "id": "nudity",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "colour": "red"
+  },
+  {
+    "id": "underwear",
+    "description": "Prevents the user/post from showing up in the \"What's Hot\" feed if NSFW content is disabled in the call",
+    "colour": "red"
+  },
+  {
+    "id": "impersonation",
+    "description": "The user has been marked as potentially impersonating another user",
+    "colour": "blue"
+  }
+]
