@@ -1,5 +1,6 @@
 import Label from '@/components/Label';
 import React, { useState } from 'react';
+import { AiFillGithub } from 'react-icons/ai';
 
 const IndexPage = () => {
   const [checkee, setCheckee] = useState('');
@@ -25,8 +26,14 @@ const IndexPage = () => {
   };
 
   return (
-    <div className="mx-auto max-w-xl mt-8">
+    <div className="mx-auto max-w-3xl mt-8">
       <p className="text-2xl">Label checker</p>
+      <a href="https://github.com/Cloudhunter/label-checker" target="_blank">
+        <div className="flex absolute top-0 right-0 items-center">
+          <AiFillGithub />
+          <span className="ml-0.5">Find on GitHub!</span>
+        </div>
+      </a>
 
       <div className="relative flex w-full flex-wrap items-stretch mb-3">
         <input
