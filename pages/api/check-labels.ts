@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { BskyAgent, ComAtprotoLabelDefs } from '@atproto/api';
 import { AtUri, AppBskyFeedDefs } from '@atproto/api';
-import { XRPCInvalidResponseError } from '@atproto/xrpc';
 import labelsMap from './labelDescriptions.json';
 import { env } from 'process';
 
@@ -63,7 +62,7 @@ export default async function handler(
     const atString = `at://${handle}/app.bsky.feed.post/${rkey}`;
     await checkPost(new AtUri(atString), res);
   } else {
-    await checkHandle(checkee as string, res);
+    await checkHandle(checkee, res);
   }
 }
 
@@ -80,8 +79,8 @@ async function checkHandle(handle: string, res: NextApiResponse) {
       error: '',
     });
   } catch (error) {
-    if (error instanceof XRPCInvalidResponseError) {
-      res.status(error.status);
+    if (error instanceof Error) {
+      res.status(404);
       res.json({
         labelList: [],
         error: error.message,
@@ -115,8 +114,8 @@ async function checkPost(post: AtUri, res: NextApiResponse) {
       });
     }
   } catch (error) {
-    if (error instanceof XRPCInvalidResponseError) {
-      res.status(error.status);
+    if (error instanceof Error) {
+      res.status(404);
       res.json({
         labelList: [],
         error: error.message,

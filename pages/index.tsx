@@ -41,6 +41,7 @@ const IndexPage = () => {
           placeholder="handle or post"
           className="px-3 py-4 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-base border border-slate-300 outline-none focus:outline-none focus:ring w-full pl-10"
           value={checkee}
+          defaultValue=""
           onChange={checkeeChange}
           onKeyPress={(e) => {
             if (e.key === 'Enter' && buttonState == true) {
